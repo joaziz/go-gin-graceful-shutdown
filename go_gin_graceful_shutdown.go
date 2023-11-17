@@ -36,7 +36,7 @@ func Serve(opt *Options) {
 	err := httpServer.ListenAndServe()
 
 	if err != nil {
-		if !errors.As(err, &http.ErrServerClosed) {
+		if !errors.Is(err, http.ErrServerClosed) {
 			opt.Log.Error(err.Error())
 		}
 	}
