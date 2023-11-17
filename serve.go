@@ -11,8 +11,8 @@ import (
 
 // Serve starts the server and listen to OS signals to init graceful shutdown
 //
-//	if opt.log is nil, it will use slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-//		Level: slog.LevelInfo,
+//	if opt.Log is nil, it will use sLog.New(sLog.NewTextHandler(os.Stdout, &sLog.HandlerOptions{
+//		Level: sLog.LevelInfo,
 //	}))
 //
 // Options is the struct to configure the server
@@ -28,34 +28,34 @@ func Serve(opt *Options) {
 	//  listenToOSSignalsAndInitShutdown listen to OS signals and init graceful shutdown
 	//  it will wait for opt.WaitTimeout to finish all run requests
 	//  if opt.WaitTimeout is 0, it will use 20 * time.Second
-	go listenToOSSignalsAndInitShutdown(opt.WaitTimeout, httpServer, opt.log, readyToClose)
+	go listenToOSSignalsAndInitShutdown(opt.WaitTimeout, httpServer, opt.Log, readyToClose)
 
-	opt.log.Info("Server started and ready to accept requests on port", "port", opt.Port)
+	opt.Log.Info("Server started and ready to accept requests on port", "port", opt.Port)
 
 	// ListenAndServe starts the server and listen to port
 	err := httpServer.ListenAndServe()
 
 	if err != nil {
 		if !errors.As(err, &http.ErrServerClosed) {
-			opt.log.Error(err.Error())
+			opt.Log.Error(err.Error())
 		}
 	}
 
 	<-readyToClose
-	opt.log.Info("bye bye")
+	opt.Log.Info("bye bye")
 }
 
 // loadOptionsDefaults loads the default values for the options
 // if opt.Port is 0, it will use 8080
 // if opt.WaitTimeout is 0, it will use 20 * time.Second
 //
-//	if opt.log is nil, it will use slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-//			Level: slog.LevelInfo,
+//	if opt.Log is nil, it will use sLog.New(sLog.NewTextHandler(os.Stdout, &sLog.HandlerOptions{
+//			Level: sLog.LevelInfo,
 //		}))
 //
 // if opt.Engin is nil, it will panic
 // if opt.Engin is not nil, it will use opt.Engine
-// if opt.log is not nil, it will use opt.log
+// if opt.Log is not nil, it will use opt.Log
 // if opt.Port is not nil, it will use opt.Port
 // if opt.WaitTimeout is not nil, it will use opt.WaitTimeout
 func loadOptionsDefaults(opt *Options) *Options {
@@ -70,8 +70,8 @@ func loadOptionsDefaults(opt *Options) *Options {
 		opt.WaitTimeout = 20 * time.Second
 	}
 
-	if opt.log == nil {
-		opt.log = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+	if opt.Log == nil {
+		opt.Log = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 			Level: slog.LevelInfo,
 		}))
 	}
