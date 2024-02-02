@@ -1,3 +1,6 @@
+
+if you need to know more about the concept of graceful shutdown you can read this article [here](https://blog.joeaziz.com/ensuring-smooth-operations-with-go-gin-graceful-shutdown/)
+
 # go-gin-graceful-shutdown
 `go-gin-graceful-shutdown` is a lightweight, easy-to-use package that seamlessly integrates graceful shutdown capabilities into your Gin-based HTTP servers. Designed with simplicity and efficiency in mind, it ensures that your web applications can handle termination signals gracefully, allowing ongoing requests to complete before the server shuts down. This mechanism is crucial for maintaining high availability and reliability of services, especially in production environments.
 
