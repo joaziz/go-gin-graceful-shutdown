@@ -36,7 +36,7 @@ import (
 
 func main() {
 // Initialize your Gin router
-router := gin.Default()
+        router := gin.Default()
 
 	// Define your routes
 	router.GET("/", func(c *gin.Context) {
