@@ -24,7 +24,7 @@ func listenToOSSignalsAndInitShutdown(timeout time.Duration, httpServer *http.Se
 	s := <-sig
 	close(sig)
 	log.Info("server received signal", "signal", s.String())
-	log.Info("server waiting to finish all run requests or reach timeout of ", "timeout", timeout.String())
+	log.Info("server waiting to finish all run requests or reach timeout.", "timeout", timeout.String())
 	// create a context with timeout
 	// if timeout is 0, it will use 20 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)

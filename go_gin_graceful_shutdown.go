@@ -20,7 +20,7 @@ func Serve(opt *Options) {
 
 	opt = loadOptionsDefaults(opt)
 	//  starts the server with the options provided
-	httpServer := &http.Server{Addr: fmt.Sprintf(":%d", opt.Port), Handler: opt.Engin}
+	httpServer := &http.Server{Addr: opt.Addr, Handler: opt.Engin}
 
 	//  readyToClose is a channel to notify when the server is ready to closed
 	readyToClose := make(chan bool)
@@ -30,7 +30,7 @@ func Serve(opt *Options) {
 	//  if opt.WaitTimeout is 0, it will use 20 * time.Second
 	go listenToOSSignalsAndInitShutdown(opt.WaitTimeout, httpServer, opt.Log, readyToClose)
 
-	opt.Log.Info("Server started and ready to accept requests on port", "port", opt.Port)
+	opt.Log.Info("Server started and ready to accept requests", "addr", opt.Addr)
 
 	// ListenAndServe starts the server and listen to port
 	err := httpServer.ListenAndServe()
@@ -62,6 +62,7 @@ func loadOptionsDefaults(opt *Options) *Options {
 	if opt.Engin == nil {
 		panic("gin engine is required")
 	}
+
 	if opt.Port == 0 {
 		opt.Port = 8080
 	}
@@ -74,6 +75,10 @@ func loadOptionsDefaults(opt *Options) *Options {
 		opt.Log = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 			Level: slog.LevelInfo,
 		}))
+	}
+
+	if opt.Addr == "" {
+		opt.Addr = fmt.Sprintf(":%d", opt.Port)
 	}
 
 	return opt
